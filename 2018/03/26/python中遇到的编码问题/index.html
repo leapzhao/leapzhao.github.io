@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-bounce.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-my.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python,编码," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="文章总述主要是总结平时在使用python过程中遇到的编码问题   1-写入文件时报UnicodeEncodeError 2-在scrapy框架中用xpath解析时print打印出来是Selector对象 3.\x开头编码的数据解码成中文">
+<meta name="keywords" content="python,编码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python中遇到的编码问题">
+<meta property="og:url" content="http://yoursite.com/2018/03/26/python中遇到的编码问题/index.html">
+<meta property="og:site_name" content="Leap-Zhao Blog">
+<meta property="og:description" content="文章总述主要是总结平时在使用python过程中遇到的编码问题   1-写入文件时报UnicodeEncodeError 2-在scrapy框架中用xpath解析时print打印出来是Selector对象 3.\x开头编码的数据解码成中文">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/03/26/python中遇到的编码问题/1.png">
+<meta property="og:updated_time" content="2018-03-26T09:47:09.562Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python中遇到的编码问题">
+<meta name="twitter:description" content="文章总述主要是总结平时在使用python过程中遇到的编码问题   1-写入文件时报UnicodeEncodeError 2-在scrapy框架中用xpath解析时print打印出来是Selector对象 3.\x开头编码的数据解码成中文">
+<meta name="twitter:image" content="http://yoursite.com/2018/03/26/python中遇到的编码问题/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/26/python中遇到的编码问题/"/>
+
+
+
+
+
+  <title>python中遇到的编码问题 | Leap-Zhao Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Leap-Zhao Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">要嫁就嫁程序猿——钱多话少死的早</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/26/python中遇到的编码问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="leap-Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Leap-Zhao Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python中遇到的编码问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-26T11:02:19+08:00">
+                2018-03-26
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-26T17:47:09+08:00">
+                2018-03-26
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/后台/" itemprop="url" rel="index">
+                    <span itemprop="name">后台</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/后台/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="文章总述"><a href="#文章总述" class="headerlink" title="文章总述"></a>文章总述</h2><p>主要是总结平时在使用python过程中遇到的编码问题</p>
+<blockquote>
+<ul>
+<li>1-写入文件时报UnicodeEncodeError</li>
+<li>2-在scrapy框架中用xpath解析时print打印出来是Selector对象</li>
+<li>3.\x开头编码的数据解码成中文</li>
+</ul>
+</blockquote>
+<a id="more"></a>
+<hr>
+<h2 id="1-写入文件时报UnicodeEncodeError"><a href="#1-写入文件时报UnicodeEncodeError" class="headerlink" title="1 写入文件时报UnicodeEncodeError"></a>1 写入文件时报UnicodeEncodeError</h2><h3 id="1-1-问题描述"><a href="#1-1-问题描述" class="headerlink" title="1.1 问题描述"></a>1.1 问题描述</h3><blockquote>
+<p>UTF-8编码的字符串，不能写入文件中,当向一个文件写入时,可能会遇到以下问题:<br>Traceback (most recent call last): File “<your filename="">.py“, line <error line="">, in <module>f.write(…) UnicodeEncodeError:’ascii’ codec can’t encode characters in position &lt;…&gt;: ordinal not in range(…)</module></error></your></p>
+</blockquote>
+<h3 id="1-2-解决方法一"><a href="#1-2-解决方法一" class="headerlink" title="1.2 解决方法一"></a>1.2 解决方法一</h3><p>1.文件声明为 #coding=utf-8<br>2.开头重新载入编码,代码如下:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> sys</div><div class="line">reload(sys) </div><div class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</div></pre></td></tr></table></figure></p>
+<p>3.加入写入文件代码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">file=open(<span class="string">'&lt;your filename&gt;'</span>,<span class="string">'w'</span>) <span class="comment">#&lt;your filename&gt;是你想要写入的文件名字.</span></div></pre></td></tr></table></figure></p>
+<h3 id="1-3-解决方法二"><a href="#1-3-解决方法二" class="headerlink" title="1.3 解决方法二"></a>1.3 解决方法二</h3><p>1.导入模块codecs: import codecs,codecs专门用作编码转换.<a href="https://docs.python.org/2/library/codecs.html" target="_blank" rel="external">codecs官方文档</a><br>2.以utf8编码打开文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> codecs</div><div class="line">...</div><div class="line"><span class="comment">#写入文件函数</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_to_file</span><span class="params">(list, filename)</span>:</span>                                          </div><div class="line">    <span class="keyword">with</span> codecs.open(filename, <span class="string">'a'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:                </div><div class="line">        f.writelines(list)</div></pre></td></tr></table></figure>
+<h3 id="1-4-原理"><a href="#1-4-原理" class="headerlink" title="1.4 原理"></a>1.4 原理</h3><ul>
+<li>查看<a href="http://blog.csdn.net/love_rongrong/article/details/17119261" target="_blank" rel="external">此处</a></li>
+</ul>
+<hr>
+<h2 id="2-在scrapy框架中用xpath解析时print打印出来是Selector对象"><a href="#2-在scrapy框架中用xpath解析时print打印出来是Selector对象" class="headerlink" title="2 在scrapy框架中用xpath解析时print打印出来是Selector对象"></a>2 在scrapy框架中用xpath解析时print打印出来是Selector对象</h2><h3 id="2-1-问题描述"><a href="#2-1-问题描述" class="headerlink" title="2.1 问题描述"></a>2.1 问题描述</h3><blockquote>
+<p>在scrapy框架中用xpath解析时print打印出来是Selector对象,代码如下:</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self,response)</span>:</span></div><div class="line">        <span class="comment"># xpath解析</span></div><div class="line">        teacher_list = response.xpath(<span class="string">'//div[@class="li_txt"]'</span>)</div><div class="line">        <span class="keyword">for</span> teacher <span class="keyword">in</span> teacher_list:</div><div class="line">            <span class="comment"># xpath返回的都是列表</span></div><div class="line">            name = teacher.xpath(<span class="string">'./h3/text()'</span>)</div><div class="line">            title = teacher.xpath(<span class="string">'./h4/text()'</span>)</div><div class="line">            info = teacher.xpath(<span class="string">'./p/text()'</span>)</div><div class="line">            <span class="keyword">print</span> name[<span class="number">0</span>]</div><div class="line">            <span class="keyword">print</span> title[<span class="number">0</span>]</div><div class="line">            <span class="keyword">print</span> info[<span class="number">0</span>]</div></pre></td></tr></table></figure>
+<ul>
+<li>打印的结果如下:<!-- ![图片](python-encode-error/1.png)     -->
+<img src="/2018/03/26/python中遇到的编码问题/1.png" alt="图片">    </li>
+</ul>
+<h3 id="2-2-解决方法"><a href="#2-2-解决方法" class="headerlink" title="2.2 解决方法"></a>2.2 解决方法</h3><ul>
+<li>将xpath解析后获得的列表或列表中的元素运用extract()方法(),修改后的代码如下:</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 对xpath解析后的列表运用extract()方法</span></div><div class="line">name = teacher.xpath(<span class="string">'./h3/text()'</span>).extract()</div><div class="line">title = teacher.xpath(<span class="string">'./h4/text()'</span>).extract()</div><div class="line">info = teacher.xpath(<span class="string">'./p/text()'</span>).extract()</div><div class="line"><span class="comment"># 或者是下面这种</span></div><div class="line"><span class="comment"># 对列表中的元素运用extract()方法</span></div><div class="line"><span class="keyword">print</span> name[<span class="number">0</span>].extract()</div><div class="line"><span class="keyword">print</span> title[<span class="number">0</span>].extract()</div><div class="line"><span class="keyword">print</span> info[<span class="number">0</span>].extract()</div></pre></td></tr></table></figure>
+<h3 id="2-3-原理"><a href="#2-3-原理" class="headerlink" title="2.3 原理"></a>2.3 原理</h3><ul>
+<li>在scrapy框架中,xpath解析后返回的不是列表list对象,而是SelectorList对象(是内建list类的子类)</li>
+<li>SelectorList中的每个元素都是Selector对象,所以打印出来的是Selector对象</li>
+<li>而extract方法是SelectorList对象和Selector对象的方法,可以把SelectorList对象转换成list类型,可以把Selector对象转换成unicode字符串</li>
+<li>参考: <a href="https://www.cnblogs.com/sufei-duoduo/p/5868027.html" target="_blank" rel="external">爬虫：Scrapy5 - 选择器Selectors</a> &amp;&amp; <a href="https://segmentfault.com/q/1010000005865480" target="_blank" rel="external">xpath解析使用extract()的时候，几种情况有点分不清楚</a></li>
+</ul>
+<hr>
+<h2 id="3-x开头编码的数据解码成中文"><a href="#3-x开头编码的数据解码成中文" class="headerlink" title="3 \x开头编码的数据解码成中文"></a>3 \x开头编码的数据解码成中文</h2><h3 id="3-1-问题描述"><a href="#3-1-问题描述" class="headerlink" title="3.1 问题描述"></a>3.1 问题描述</h3><blockquote>
+<p>在python中输出的中文是以\x开头编码的</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;</span>&gt;&gt; "\xE5\x85\x84\xE5\xBC\x9F\xE9\x9A\xBE\xE5\xBD\x93 \xE6\x9D\x9C\xE6\xAD\x8C".decode('utf-8')</div><div class="line">u'\u5144\u5f1f\u96be\u5f53 \u675c\u6b4c'</div><div class="line"><span class="meta">&gt;</span>&gt;&gt; print "\xE5\x85\x84\xE5\xBC\x9F\xE9\x9A\xBE\xE5\xBD\x93 \xE6\x9D\x9C\xE6\xAD\x8C".decode('utf-8')</div><div class="line">兄弟难当 杜歌</div><div class="line"><span class="meta">&gt;</span>&gt;&gt;</div></pre></td></tr></table></figure>
+<h3 id="3-2-解决方法"><a href="#3-2-解决方法" class="headerlink" title="3.2 解决方法"></a>3.2 解决方法</h3><ul>
+<li>\x对应的是UTF-8编码的数据，通过decode(‘utf-8’)转化规则可以转换为Unicode编码，unicode再用print打印出来即可</li>
+<li>如果是列表,不要直接打印列表,而应print列表中的元素</li>
+</ul>
+<hr>
+<h2 id="4-python编码问题"><a href="#4-python编码问题" class="headerlink" title="4 python编码问题"></a>4 python编码问题</h2><ul>
+<li><a href="https://www.cnblogs.com/fnng/p/5008884.html" target="_blank" rel="external">Python编码问题整理</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/编码/" rel="tag"># 编码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/19/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/26/sublime设置/" rel="prev" title="sublime设置">
+                sublime设置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="leap-Zhao" />
+            
+              <p class="site-author-name" itemprop="name">leap-Zhao</p>
+              <p class="site-description motion-element" itemprop="description">leap-zhao,blog</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/leap-zhao" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/zhao-xian-sheng-60-79/" target="_blank" title="知乎">
+                      
+                        <i class="fa fa-fw fa-globe"></i>知乎</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-external-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://example.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.3134.cc/" title="网盘资源站" target="_blank">网盘资源站</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文章总述"><span class="nav-text">文章总述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-写入文件时报UnicodeEncodeError"><span class="nav-text">1 写入文件时报UnicodeEncodeError</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-问题描述"><span class="nav-text">1.1 问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-解决方法一"><span class="nav-text">1.2 解决方法一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-解决方法二"><span class="nav-text">1.3 解决方法二</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-原理"><span class="nav-text">1.4 原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-在scrapy框架中用xpath解析时print打印出来是Selector对象"><span class="nav-text">2 在scrapy框架中用xpath解析时print打印出来是Selector对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-问题描述"><span class="nav-text">2.1 问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-解决方法"><span class="nav-text">2.2 解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-原理"><span class="nav-text">2.3 原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-x开头编码的数据解码成中文"><span class="nav-text">3 \x开头编码的数据解码成中文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-问题描述"><span class="nav-text">3.1 问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-解决方法"><span class="nav-text">3.2 解决方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-python编码问题"><span class="nav-text">4 python编码问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">leap-Zhao</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
