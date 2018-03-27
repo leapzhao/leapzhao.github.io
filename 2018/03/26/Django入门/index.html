@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="leap-zhao, blog" />
+  <meta name="keywords" content="python,django," />
 
 
 
@@ -86,16 +86,18 @@
 
 
 
+<meta name="description" content="django入门知识">
+<meta name="keywords" content="python,django">
 <meta property="og:type" content="article">
-<meta property="og:title" content="insert image test">
-<meta property="og:url" content="http://yoursite.com/2017/10/19/insert-image-test/index.html">
+<meta property="og:title" content="Django入门">
+<meta property="og:url" content="http://yoursite.com/2018/03/26/Django入门/index.html">
 <meta property="og:site_name" content="Leap-Zhao Blog">
+<meta property="og:description" content="django入门知识">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2017/10/19/insert-image-test/b.jpg">
-<meta property="og:updated_time" content="2018-03-26T05:03:55.850Z">
+<meta property="og:updated_time" content="2018-03-26T13:35:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="insert image test">
-<meta name="twitter:image" content="http://yoursite.com/2017/10/19/insert-image-test/b.jpg">
+<meta name="twitter:title" content="Django入门">
+<meta name="twitter:description" content="django入门知识">
 
 
 
@@ -125,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/10/19/insert-image-test/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/26/Django入门/"/>
 
 
 
 
 
-  <title>insert image test | Leap-Zhao Blog</title>
+  <title>Django入门 | Leap-Zhao Blog</title>
   
 
 
@@ -306,7 +308,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/19/insert-image-test/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/26/Django入门/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="leap-Zhao">
@@ -323,7 +325,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">insert image test</h1>
+          <h1 class="post-title" itemprop="name headline">Django入门</h1>
         
 
         <div class="post-meta">
@@ -335,8 +337,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-19T16:46:57+08:00">
-                2017-10-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-26T21:33:10+08:00">
+                2018-03-26
               </time>
             
 
@@ -351,7 +353,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-26T13:03:55+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-26T21:35:45+08:00">
                 2018-03-26
               </time>
             
@@ -370,8 +372,19 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/test/" itemprop="url" rel="index">
-                    <span itemprop="name">test</span>
+                  <a href="/categories/后台/" itemprop="url" rel="index">
+                    <span itemprop="name">后台</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/后台/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
                   </a>
                 </span>
 
@@ -393,6 +406,10 @@
           
 
           
+              <div class="post-description">
+                  django入门知识
+              </div>
+          
 
         </div>
       </header>
@@ -407,8 +424,33 @@
       
 
       
-        <p><img src="/2017/10/19/insert-image-test/b.jpg" alt="fds"></p>
-<a id="more"></a>
+        <h2 id="1-django-开发流程"><a href="#1-django-开发流程" class="headerlink" title="1 django 开发流程"></a>1 django 开发流程</h2><ul>
+<li>1.创建虚拟环境</li>
+<li>2.在虚拟环境中安装django</li>
+<li>3.创建项目</li>
+<li>4.创建应用</li>
+<li>5.在models.py中定义模型类model</li>
+<li>6.定义视图view</li>
+<li>7.配置url</li>
+<li>8.创建模板template</li>
+<li>注:(django为MVT模型,与MVC模型相似,V相当于MVC模型中的Controller,T相当于View)</li>
+</ul>
+<hr>
+<h2 id="2-相关命令"><a href="#2-相关命令" class="headerlink" title="2 相关命令"></a>2 相关命令</h2><ul>
+<li>创建django项目: django-admin startproject projectName</li>
+<li>为django项目添加一个应用app: python manage.py startapp appName</li>
+<li>运行服务器: python manage.py runserver 8088 (自己指定的端口号)</li>
+<li>把自己的应用注册到项目: 在projectName/projectName/settings.py中的INSTALLED_APP键中添加对应的值’appName’</li>
+<li>生成迁移文件(根据模型类生成sql语句): python manage.py makemigrations</li>
+<li>执行迁移(执行sql语句生成数据表): python manage.py migrate</li>
+<li>进入django的shell: python manage.py shell</li>
+<li>创建后台管理员: python manage.py createsuperuser</li>
+</ul>
+<hr>
+<h2 id="3-admin的使用-admin-py"><a href="#3-admin的使用-admin-py" class="headerlink" title="3 admin的使用-admin.py"></a>3 admin的使用-admin.py</h2><ul>
+<li>admin.site.register(模型类,admin类)</li>
+</ul>
+
       
     </div>
     
@@ -423,6 +465,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/django/" rel="tag"># django</a>
+          
+        </div>
+      
 
       
       
@@ -432,8 +482,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/19/welcome-cmd-markdown/" rel="next" title="欢迎使用 Cmd Markdown 编辑阅读器">
-                <i class="fa fa-chevron-left"></i> 欢迎使用 Cmd Markdown 编辑阅读器
+              <a href="/2018/03/26/python下使用虚拟环境virtualenv/" rel="next" title="python下使用虚拟环境virtualenv">
+                <i class="fa fa-chevron-left"></i> python下使用虚拟环境virtualenv
               </a>
             
           </div>
@@ -442,8 +492,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/19/hello-world/" rel="prev" title="Hello World">
-                Hello World <i class="fa fa-chevron-right"></i>
+              <a href="/2018/03/26/py2与py3共存的问题/" rel="prev" title="py2与py3共存的问题">
+                py2与py3共存的问题 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -496,8 +546,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -595,6 +654,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-django-开发流程"><span class="nav-text">1 django 开发流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-相关命令"><span class="nav-text">2 相关命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-admin的使用-admin-py"><span class="nav-text">3 admin的使用-admin.py</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
